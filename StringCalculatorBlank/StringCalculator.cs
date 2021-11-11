@@ -1,12 +1,59 @@
 ﻿using System;
+using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace StringCalculatorBlank
 {
-    //public class StringCalculator
-    //{
-    //    public int Add(string numbers)
-    //    {
-    //        return -42;
-    //    }
-    //}
+    public class StringCalculator
+    {
+        private readonly ILogger _logger;
+        private readonly IWebService _webService;
+
+        public StringCalculator(ILogger logger, IWebService webService)
+        {
+            _logger = logger;
+            _webService = webService;
+        }
+
+        public int Add(string stringOfNumbers)
+        {
+            var nums = NumsArray(stringOfNumbers);
+            var negNums = NegNumsArray(stringOfNumbers);
+
+            if (negNums.Count() > 0)
+                throw new Exception($"Negatives not Allowed {string.Join(" ", negNums)}");
+
+            try
+            {
+                _logger.Write(nums.Sum().ToString());
+            }
+            catch (LoggerException ex)
+            {
+
+                _webService.Notify(ex.Message);
+            }
+
+            return nums.Sum();
+        }
+
+        private int[] NumsArray(string stringOfNumbers)
+        {
+            var findNums = new Regex(@"\d+");
+            var numMatches = findNums.Matches(stringOfNumbers);
+            var nums = numMatches
+                        .Select(m => Convert.ToInt32(m.Value))
+                        .ToArray();
+            return nums;
+        }
+
+        private int[] NegNumsArray(string stringOfNumbers)
+        {
+            var findNums = new Regex(@"-\d+");
+            var negNumMatches = findNums.Matches(stringOfNumbers);
+            var negNums = negNumMatches
+                        .Select(m => Convert.ToInt32(m.Value))
+                        .ToArray();
+            return negNums;
+        }
+    }
 }
