@@ -49,7 +49,8 @@ namespace StringCalculatorBlank
             var nums = NumsArray(stringOfNumbers);
             var negNums = NegNumsArray(stringOfNumbers);
 
-            if (negNums.Count() > 0) throw new Exception($"Negatives not Allowed {string.Join(" ", negNums)}");
+            if (negNums.Count() > 0) 
+                throw new Exception($"Negatives not Allowed {string.Join(" ", negNums)}");
 
             return nums.Sum();
         }
@@ -59,7 +60,6 @@ namespace StringCalculatorBlank
             var findNums = new Regex(@"\d+");
             var numMatches =  findNums.Matches(stringOfNumbers);
             var nums = numMatches
-                        .Cast<Match>()
                         .Select(m => Convert.ToInt32(m.Value))
                         .ToArray();
             return nums;
@@ -70,7 +70,6 @@ namespace StringCalculatorBlank
             var findNums = new Regex(@"-\d+");
             var negNumMatches = findNums.Matches(stringOfNumbers);
             var negNums = negNumMatches
-                        .Cast<Match>()
                         .Select(m => Convert.ToInt32(m.Value))
                         .ToArray();
             return negNums;
