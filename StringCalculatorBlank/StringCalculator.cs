@@ -65,17 +65,12 @@ public class StringCalculator
         return nums;
     }
 
-    private Regex NumsRegex()
-    {
-        return new Regex(@"\d+");
-    }
+    private Regex NumsRegex() => new(@"\d+");
 
-    private Regex NegNumsRegex()
-    {
-        return new Regex(@"\d+");
-    }
+    private Regex NegNumsRegex() => new(@"\d+");
 
+    public delegate Regex regMe();
 
 }
 
-public delegate Regex regMe();
+
